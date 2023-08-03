@@ -6,4 +6,14 @@ module NakiCommon
       at 0
     end
   end
+  def self.shorter_backtrace
+    begin
+      yield
+    rescue
+      $!.set_backtrace( $!.backtrace_locations.chunk(&:path).map do |path, locs|
+        [path, locs.map(&:lineno).chunk(&:itself).map(&:first)].join ":"
+      end )
+      raise
+    end
+  end
 end
