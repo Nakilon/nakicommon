@@ -5,6 +5,12 @@ module NakiCommon
       raise Error, "size: #{size.to_s}" unless 1 == size
       at 0
     end
+    def median
+      (sort[size / 2] + sort[(size - 1) / 2]) / 2r
+    end
+    def mean
+      reduce(:+)&.fdiv size
+    end
   end
   def self.shorter_backtrace
     begin
