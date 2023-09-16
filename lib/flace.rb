@@ -4,7 +4,8 @@ Kernel.class_eval do
   # https://github.com/Homebrew/legacy-homebrew/commit/586663d228f2bd31d67bc86042d0004b4f44e82d
   define_method :require do |lib|
     old.bind(self).(lib).tap do |_|
-      next false unless _
+      next unless _
+      next unless NakiCommon.print_require
       # puts "#{" " * caller.size}flace require #{lib.inspect} (#{::Pathname.new(::File.expand_path caller[0]).relative_path_from(::Pathname.new ::File.expand_path ::Dir.pwd)})"
       puts "#{" " * caller.size}flace require #{lib.inspect} (#{::File.basename caller[0]})"
       # puts "#{" " * caller.size}flace require #{lib.inspect}"
@@ -18,6 +19,10 @@ FileUtils.mkdir_p "#{Dir.tmpdir}/fake_lib"
 $LOAD_PATH.unshift "#{Dir.tmpdir}/fake_lib"
 
 module NakiCommon
+  class << self
+    attr_accessor :print_require
+  end
+  self.print_require = true
   def self.clear_env *exceptions
     ::ENV.keep_if{ |k,| exceptions.include? k }
     # ENV["PATH"] ||= ""
