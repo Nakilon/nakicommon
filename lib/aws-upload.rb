@@ -6,7 +6,7 @@ module NakiCommon
       code, response = ( ::Net::HTTP.new("storage.yandexcloud.net", 443).tap{ |_| _.use_ssl = true }.start do |http|
         http.request ::Net::HTTP::Put.new(
           url,
-          ::Aws::Sigv4.Signer.new(
+          ::Aws::Sigv4::Signer.new(
             service: "s3", region: "ru-central1",
             access_key_id: access_key_id,
             secret_access_key: secret_access_key
