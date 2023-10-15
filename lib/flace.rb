@@ -1,3 +1,21 @@
+module NakiCommon
+  class << self
+    attr_accessor :print_require
+  end
+  # self.attr_accessor :print_require
+  self.print_require = true
+  def self.clear_env *exceptions
+    ::ENV.keep_if{ |k,| exceptions.include? k }
+    # ENV["PATH"] ||= ""
+  end
+  def self.flace lib
+    puts "faking #{lib}"
+    ::FileUtils.mkdir_p ::File.dirname "#{::Dir.tmpdir}/fake_lib/#{lib}"
+    ::FileUtils.touch "#{::Dir.tmpdir}/fake_lib/#{lib}.rb"
+    require lib
+  end
+end
+
 require "pathname"
 Kernel.class_eval do
   old = instance_method :require
@@ -17,20 +35,3 @@ require "tmpdir"
 FileUtils.rm_rf "#{Dir.tmpdir}/fake_lib"
 FileUtils.mkdir_p "#{Dir.tmpdir}/fake_lib"
 $LOAD_PATH.unshift "#{Dir.tmpdir}/fake_lib"
-
-module NakiCommon
-  class << self
-    attr_accessor :print_require
-  end
-  self.print_require = true
-  def self.clear_env *exceptions
-    ::ENV.keep_if{ |k,| exceptions.include? k }
-    # ENV["PATH"] ||= ""
-  end
-  def self.flace lib
-    puts "faking #{lib}"
-    ::FileUtils.mkdir_p ::File.dirname "#{::Dir.tmpdir}/fake_lib/#{lib}"
-    ::FileUtils.touch "#{::Dir.tmpdir}/fake_lib/#{lib}.rb"
-    require lib
-  end
-end
