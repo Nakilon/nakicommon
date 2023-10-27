@@ -22,4 +22,7 @@ module NakiCommon
       raise
     end
   end
+  ENV.define_singleton_method :nakifetch do |key|
+    ::ENV[key] || fail("no #{key} env var")
+  end
 end
