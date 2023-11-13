@@ -25,4 +25,13 @@ module NakiCommon
   ENV.define_singleton_method :nakifetch do |key|
     ::ENV[key] || fail("no #{key} env var")
   end
+  def self.ratelimit seconds, filename
+    require "fileutils"
+    while 0 < t = ::File.mtime("#{filename}.touch") - ::Time.now + seconds
+      ::STDERR::puts "sleeping #{t} seconds (lock file: ./#{filename}.touch)"
+      sleep t
+    end if ::File.exist? "#{filename}.touch"
+    ::FileUtils.touch "#{filename}.touch"
+    yield
+  end
 end

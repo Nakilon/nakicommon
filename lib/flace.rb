@@ -16,6 +16,8 @@ module NakiCommon
   end
 end
 
+require "tmpdir"
+
 require "pathname"
 Kernel.class_eval do
   old = instance_method :require
@@ -31,7 +33,6 @@ Kernel.class_eval do
   end
 end
 
-require "tmpdir"
 FileUtils.rm_rf "#{Dir.tmpdir}/fake_lib"
 FileUtils.mkdir_p "#{Dir.tmpdir}/fake_lib"
 $LOAD_PATH.unshift "#{Dir.tmpdir}/fake_lib"
