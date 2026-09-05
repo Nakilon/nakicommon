@@ -8,5 +8,5 @@ Gem::Specification.new do |spec|
   spec.email        = "nakilon@gmail.com"
   spec.license      = "MIT"
 
-  # spec.files        = %w{ LICENSE nakicommon.gemspec lib/nakicommon.rb }
+  spec.files        = %w{ LICENSE nakicommon.gemspec lib/nakicommon/refinements.rb }
 end
